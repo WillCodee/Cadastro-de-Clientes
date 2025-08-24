@@ -51,15 +51,26 @@
 }
 
 .modal-form{
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     flex-wrap: wrap;
     gap: 20px;
-    padding: 0 20px;
+    margin: 20px;
+    /* padding: 0 40px; */
+}
+
+/* cada campo é uma coluna do grid; empilha input + erro */
+.field{
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-form input{
+    display: block;
 }
 
 .modal-field{
-    width: calc(50% - 10px);
+    width: 100%;
     height: 40px;
     outline-style: none;
     border-style: none;

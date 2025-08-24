@@ -1,3 +1,4 @@
+
 const openModal = () => document.getElementById('modal').classList.add('active')
 
 const closeModal = () => {
@@ -6,12 +7,10 @@ const closeModal = () => {
     }
 
 
-const tempClient = {
-    nome: 'Silvia',
-    email: 'silvia@gmail.com',
-    celular: "(71) 91234-5678",
-    cidade: "Salvador"
-}
+const inputNome = document.getElementById('nome')
+const inputEmail = document.getElementById('email')
+const inputCelular = document.getElementById('celular')
+const inputCidade = document.getElementById('cidade')
 
 // Ler o q está no localStorage transforma em jason e envia pro db_client
 const getLocalStorage = () => JSON.parse(localStorage.getItem('db_client')) || [] 
@@ -45,25 +44,118 @@ const deleteClient = (index) => {
     setLocalStorage(dbClient)
 }
 
-//Validação dos Campos
-const isValiddFields = () => {
-    //Retorna verdadeiro se todos os requisitos forem true
-    return document.getElementById('form').reportValidity()
+//Campo Cria Erro
+const criaErro = (campo,msg) => {
+    const div = document.createElement('div')
+    div.innerText = msg
+    div.classList.add('error-text')
+    campo.insertAdjacentElement('afterend',div)
 }
+
+function limparErros(){
+    const divs = document.querySelectorAll('.error-text')
+    divs.forEach(div => div.remove())
+}
+
+const validaName = (nome) =>{
+    const regexName = new RegExp(
+        /[a-zA-Z\s]+$/
+    )
+
+    if(regexName.test(nome)){
+        return true
+    }
+    return false
+}
+
+const validaEmail = (email) => {
+    const regexEmail = new RegExp(
+        //usuario12@host.com.br
+        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,}$/
+    )
+
+    if(regexEmail.test(email)){
+        return true
+    }
+    return false
+}
+
+
+const validaCidade = (cidade) =>{
+    const regexCidade = new RegExp(
+        /[a-zA-Z\s]+$/
+    )
+
+    if(regexCidade.test(cidade)){
+        return true
+    }
+    return false
+}
+
+const validaCelular = (celular) =>{
+    const regexCelular = /^\(?[1-9]{2}\)? ?9?[0-9]{4}-?[0-9]{4}$/
+
+    if(regexCelular.test(celular)){
+        return true
+    }
+    return false
+}
+
+//Validação dos Campos
+const isValideFields = () => {
+    limparErros()
+    let valid = true
+
+    if(inputNome.value === ""){
+        criaErro(inputNome,'Campo nome não pode está em branco')
+        valid = false
+    }else if(!validaName(inputNome.value)){
+        criaErro(inputNome,'Informe o nome corretamente')
+        valid = false
+    }
+        
+    if(inputEmail.value === ''){
+        criaErro(inputEmail,'Campo email não pode está em branco')
+        valid = false
+    }else if(!validaEmail(inputEmail.value)){
+        criaErro(inputEmail,'Informe o email corretamente')
+        valid = false
+    }
+
+    if(inputCelular.value === ''){
+        criaErro(inputCelular,'Campo celular não pode está em branco')
+        valid = false
+    }else if(!validaCelular(inputCelular.value)){
+        criaErro(inputCelular,'Informe o Celular corretamente')
+        valid = false
+    }
+
+    if(inputCidade.value === ''){
+        criaErro(inputCidade,'Campo Cidade não pode está em branco')
+        valid = false
+    }else if(!validaCidade(inputCidade.value)){
+        criaErro(inputCidade,'Informe a Cidade corretamente')
+        valid = false
+    }
+
+    return valid
+    }
+    
 
 const clearFields = () => {
     const fields = document.querySelectorAll('.modal-field')
     fields.forEach(field => field.value = '')
+    limparErros()
 }
 
 //Interação com o layout
 const saveClient = () => {
-    if(isValiddFields()){
+    if(isValideFields()){
         const client = {
-            nome: document.getElementById('nome').value,
-            email:document.getElementById('email').value,
-            celular: document.getElementById('celular').value,
-            cidade: document.getElementById('cidade').value
+            nome: inputNome.value,
+            email: inputEmail.value,
+            celular: inputCelular.value,
+            cidade: inputCidade.value
         }
         //Diferenciar o salvar de Editar do de cadastrar
         const index = document.getElementById('nome').dataset.index 
