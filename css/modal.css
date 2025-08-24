@@ -90,6 +90,11 @@
     padding: 0 20px;
 }
 
+.error-text{
+    font-size: 12px;
+    color: red;
+}
+
 @media (max-width: 480px){
     .modal{
         top: 100%;
